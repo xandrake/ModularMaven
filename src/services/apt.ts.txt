@@ -1,0 +1,20 @@
+import axios from 'axios';
+import { ENV } from '../utils/constants';
+
+export const fetchPatch = async (prompt: string, model: 'ollama' | 'openai'): Promise<string> => {
+  const res = await axios.post(
+    `${ENV.apiUrl}/generate-patch`,
+    { prompt, model },
+    { responseType: 'stream' }     // important – we’ll stream back
+  );
+  const reader = res.data.getReader();
+  const decoder = new TextDecoder();
+  let data = '';
+
+  while (true) {
+    const { value, done } = await reader.read();
+    if (done) break;
+    data += decoder.decode(value, { stream: true });
+  }
+  return data;
+};

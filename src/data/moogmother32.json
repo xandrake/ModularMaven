@@ -1,0 +1,10 @@
+{
+  "manufacturer": "Moog Music",
+  "model": "Mother 32",
+  "input_types": ["Analog", "Digital"],
+  "control_range": {
+    "filter_cutoff": "2kHz - 20kHz",
+    "drive": "0 - 10"
+  },
+  "description": "A versatile analog synthesizer"
+}

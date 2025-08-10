@@ -1,0 +1,27 @@
+import { useState, useCallback } from 'react';
+import { generatePatch, LLMResult } from '../services/patchMaker';
+
+type State = {
+  loading: boolean;
+  result?: LLMResult;
+  error?: string;
+};
+
+export const usePatchGenerator = () => {
+  const [state, setState] = useState<State>({ loading: false });
+
+  const generate = useCallback(
+    async (prompt: string, model: 'ollama' | 'openai' = 'ollama') => {
+      setState({ loading: true });
+      try {
+        const res = await generatePatch(prompt, model);
+        setState({ loading: false, result: res });
+      } catch (e: any) {
+        setState({ loading: false, error: e.message ?? 'Unknown error' });
+      }
+    },
+    []
+  );
+
+  return { ...state, generate };
+};

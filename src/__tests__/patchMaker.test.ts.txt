@@ -1,0 +1,31 @@
+import { parsePatch } from '../services/patchMaker';
+
+describe('patchMaker', () => {
+  it('parses JSON inside LLM text', () => {
+    const text = `
+      Here is a patch:
+
+      {
+        "oscillators": [
+          { "type": "sine", "frequency": 120 }
+        ],
+        "filters": [
+          { "type": "lowpass", "cutoff": 1500, "resonance": 0.8 }
+        ],
+        "envelopes": [
+          { "attack": 0.01, "decay": 0.2, "sustain": 0.9, "release": 0.5 }
+        ]
+      }
+    `;
+    const { patchText, patchJson } = parsePatch(text);
+    expect(patchText).toBe(text);
+    expect(patchJson).toBeDefined();
+    expect(patchJson!.oscillators[0].frequency).toBe(120);
+  });
+
+  it('returns null when no JSON', () => {
+    const text = 'Just a string with no JSON';
+    const { patchJson } = parsePatch(text);
+    expect(patchJson).toBeUndefined();
+  });
+});

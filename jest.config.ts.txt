@@ -1,0 +1,19 @@
+import { config } from '@jest/types';
+import { pathsToModuleNameMapper } from 'ts-jest';
+import { compilerOptions } from './tsconfig.json';
+
+const configObject: config.InitialOptions = {
+  preset: 'ts-jest/presets/default-esm',  // supports ES modules
+  testEnvironment: 'jsdom',
+  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths || {}, { prefix: '<rootDir>/' }),
+  transform: {
+    '^.+\\.(ts|tsx)$': [
+      'ts-jest',
+      { tsconfig: 'tsconfig.json', diagnostics: false }
+    ]
+  },
+  setupFilesAfterEnv: ['@testing-library/jest-dom/extend-expect'],
+  testPathIgnorePatterns: ['/node_modules/', '/dist/', '/.next/']
+};
+
+export default configObject;
