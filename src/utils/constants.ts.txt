@@ -1,0 +1,5 @@
+export const ENV = {
+  apiUrl: process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3000/api',
+  ollamaUrl: process.env.NEXT_PUBLIC_OLLAMA_URL ?? 'http://localhost:11434',
+  ollamaModel: (process.env.NEXT_PUBLIC_OLLAMA_MODEL ?? 'llama2')
+};

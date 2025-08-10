@@ -1,0 +1,45 @@
+import type { FC } from 'react';
+import { useState } from 'react';
+import { usePatchGenerator } from '../hooks/usePatchGenerator';
+import styles from './GeneratePatchModal.module.css';   // optional
+
+const GeneratePatchModal: FC = () => {
+  const [prompt, setPrompt] = useState('');
+  const { loading, result, error, generate } = usePatchGenerator();
+
+  return (
+    <dialog className={styles.dialog} open>
+      <form
+        onSubmit={e => {
+          e.preventDefault(); generate(prompt);
+        }}
+        className={styles.form}
+      >
+        <h3>Generate Patch Idea</h3>
+        <textarea
+          value={prompt}
+          onChange={e => setPrompt(e.target.value)}
+          required
+          placeholder="Describe the patch you want…" 
+          className={styles.textarea}
+        />
+        <button type="submit" disabled={loading} className={styles.btn}>
+          {loading ? 'Thinking…' : 'Generate'}
+        </button>
+        {error && <p className={styles.error}>{error}</p>}
+        {result && (
+          <pre className={styles.output}>{result.patchText}</pre>
+        )}
+      </form>
+      <button
+        type="button"
+        className={styles.closeBtn}
+        onClick={() => window.history.back()}  // simple close
+      >
+        Close
+      </button>
+    </dialog>
+  );
+};
+
+export default GeneratePatchModal;

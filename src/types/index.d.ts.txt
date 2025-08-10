@@ -1,0 +1,30 @@
+export interface OscillatorSpec {
+  type: 'sine' | 'square' | 'saw' | 'triangle';
+  frequency: number; // in Hz
+}
+
+export interface FilterSpec {
+  type: 'lowpass' | 'highpass' | 'bandpass' | 'notch';
+  cutoff: number; // in Hz
+  resonance?: number; // 0.0–2.0
+}
+
+export interface EnvelopeSpec {
+  attack: number;
+  decay: number;
+  sustain: number;
+  release: number;
+  rate?: number; // optional “rate” knob
+}
+
+export interface PatchSpec {
+  oscillators: OscillatorSpec[];
+  filters: FilterSpec[];
+  envelopes: EnvelopeSpec[];
+  // you can add more (e.g., CV modulators, MVS, etc.)
+}
+
+export interface LLMResult {
+  patchText: string;
+  patchJson?: PatchSpec;   // parsed JSON if available
+}

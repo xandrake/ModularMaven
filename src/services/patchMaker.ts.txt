@@ -1,0 +1,22 @@
+import { fetchPatch } from './api';
+import { LLMResult, PatchSpec } from '../types/index';
+
+export const parsePatch = (text: string): LLMResult => {
+  let patchJson: PatchSpec | undefined;
+  try {
+    // attempt to get JSON from first `{ ... }` block
+    const jsonStart = text.indexOf('{');
+    const jsonEnd = text.lastIndexOf('}');
+    if (jsonStart !== -1 && jsonEnd !== -1) {
+      patchJson = JSON.parse(text.slice(jsonStart, jsonEnd + 1));
+    }
+  } catch {}
+
+  return { patchText: text, patchJson };
+};
+
+export const generatePatch =
+  async (prompt: string, model: 'ollama' | 'openai' = 'ollama') => {
+    const raw = await fetchPatch(prompt, model);
+    return parsePatch(raw);
+  };
